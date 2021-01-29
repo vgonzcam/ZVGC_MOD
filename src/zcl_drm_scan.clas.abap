@@ -36,7 +36,9 @@ public section.
       !UV_NAME type SOBJ_NAME
     changing
       !CV_NUMB type I
-      !CIT_HIER type GTTY_HIER .
+      !CIT_HIER type GTTY_HIER
+    exceptions
+      TYPE_NOT_FOUND .
   methods SCAN_OBJECT
     importing
       !LI_SHOW_INFO type ABAP_BOOL default ABAP_TRUE
@@ -217,44 +219,59 @@ CLASS ZCL_DRM_SCAN IMPLEMENTATION.
               it_methods TYPE abap_methdescr_tab,
               wa_methods TYPE abap_methdescr.
 
-        lcl_obj ?= cl_abap_objectdescr=>describe_by_name( uv_name ).
+        cl_abap_objectdescr=>describe_by_name(
+          EXPORTING
+            p_name         = uv_name
+          RECEIVING
+            p_descr_ref    = DATA(tmp_obj)
+          EXCEPTIONS
+            type_not_found = 1
+               ).
+        IF sy-subrc <> 0.
+        ELSE.
 
-        it_methods = lcl_obj->methods.
+          lcl_obj ?= tmp_obj.
 
-        LOOP AT it_methods INTO wa_methods.
-          APPEND INITIAL LINE TO cit_hier ASSIGNING FIELD-SYMBOL(<ls_method>).
+          it_methods = lcl_obj->methods.
 
-          <ls_method>-details = wa_methods-name.
-          <ls_method>-type    = 'CLAS'.
-          <ls_method>-parent  = uv_name.
+          LOOP AT it_methods INTO wa_methods.
+            APPEND INITIAL LINE TO cit_hier ASSIGNING FIELD-SYMBOL(<ls_method>).
 
-          CLEAR ls_prog_hier.
+            <ls_method>-details = wa_methods-name.
+            <ls_method>-type    = 'CLAS'.
+            <ls_method>-parent  = uv_name.
 
-          TRY.
-              ls_prog_hier = cit_hier[ name = <ls_method>-parent ].
-              <ls_method>-level = ls_prog_hier-level + 1.
-            CATCH cx_sy_itab_line_not_found.
-              <ls_method>-level   = cv_numb.
-          ENDTRY.
+            CLEAR ls_prog_hier.
 
-          ls_mtdkey-clsname = uv_name.
-          ls_mtdkey-cpdname = wa_methods-name.
-          cl_oo_classname_service=>get_method_include(
-            EXPORTING
-              mtdkey                = ls_mtdkey
-            RECEIVING
-              result                = <ls_method>-name
-            EXCEPTIONS
-              class_not_existing    = 1
-              method_not_existing   = 2
-              OTHERS                = 3
-                 ).
-          IF sy-subrc NE 0.ENDIF.
+            TRY.
+                ls_prog_hier = cit_hier[ name = <ls_method>-parent ].
+                <ls_method>-level = ls_prog_hier-level + 1.
+              CATCH cx_sy_itab_line_not_found.
+                <ls_method>-level   = cv_numb.
+            ENDTRY.
 
-        ENDLOOP.
+            ls_mtdkey-clsname = uv_name.
+            ls_mtdkey-cpdname = wa_methods-name.
+            cl_oo_classname_service=>get_method_include(
+              EXPORTING
+                mtdkey                = ls_mtdkey
+              RECEIVING
+                result                = <ls_method>-name
+              EXCEPTIONS
+                class_not_existing    = 1
+                method_not_existing   = 2
+                OTHERS                = 3
+                   ).
+            IF sy-subrc NE 0.ENDIF.
 
-        cv_numb = cv_numb + 1.
+          ENDLOOP.
+
+          cv_numb = cv_numb + 1.
+
+
+        ENDIF.
       ENDIF.
+
 
       LOOP AT lt_data ASSIGNING FIELD-SYMBOL(<ls_data>) WHERE ( type     EQ 'CLAS'
                                                            OR   type     EQ 'PROG'

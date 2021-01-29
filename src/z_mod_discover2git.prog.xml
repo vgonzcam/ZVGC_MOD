@@ -17,6 +17,24 @@
     </item>
     <item>
      <ID>S</ID>
+     <KEY>P_GITPWD</KEY>
+     <ENTRY>Password</ENTRY>
+     <LENGTH>16</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_GITUSR</KEY>
+     <ENTRY>Usuario</ENTRY>
+     <LENGTH>15</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_OBJTYP</KEY>
+     <ENTRY>Tipo de ejecución</ENTRY>
+     <LENGTH>25</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
      <KEY>P_ONLYZ</KEY>
      <ENTRY>Consider only Z Objects?</ENTRY>
      <LENGTH>32</LENGTH>
@@ -26,6 +44,18 @@
      <KEY>P_PROG</KEY>
      <ENTRY>Object Name</ENTRY>
      <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_REPO</KEY>
+     <ENTRY>Repositorio</ENTRY>
+     <LENGTH>19</LENGTH>
+    </item>
+    <item>
+     <ID>S</ID>
+     <KEY>P_SHOW</KEY>
+     <ENTRY>Ver resultados</ENTRY>
+     <LENGTH>22</LENGTH>
     </item>
    </TPOOL>
   </asx:values>
