@@ -5,6 +5,7 @@ REPORT zvgc_mod_r5_json_002.
 INCLUDE zvgc_mod_r5_json_002_if.
 INCLUDE zvgc_mod_r5_json_002_case.
 INCLUDE zvgc_mod_r5_json_002_loop.
+INCLUDE zvgc_mod_r5_json_003_loop.
 INCLUDE zvgc_mod_r5_json_002_do.
 INCLUDE zvgc_mod_r5_json_002_while.
 INCLUDE zvgc_mod_r5_json_002_if_ind.
