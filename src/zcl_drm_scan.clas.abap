@@ -1,65 +1,66 @@
-class ZCL_DRM_SCAN definition
-  public
-  final
-  create public .
+CLASS zcl_drm_scan DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
+  PUBLIC SECTION.
 
-  types:
-    BEGIN OF gty_hier,
-        name    TYPE c LENGTH 40,
-        type    TYPE seu_obj,
-        parent  TYPE c LENGTH 100,
-        level   TYPE c LENGTH 4,
-        details TYPE seocpdname,
+    TYPES:
+      BEGIN OF gty_hier,
+        name     TYPE c LENGTH 40,
+        type     TYPE seu_obj,
+        parent   TYPE c LENGTH 100,
+        level    TYPE c LENGTH 4,
+        details  TYPE seocpdname,
+        encl_obj TYPE sobj_name,
       END OF gty_hier .
-  types:
-    gtty_hier TYPE STANDARD TABLE OF gty_hier .
-  types:
-    BEGIN OF gty_source,
+    TYPES:
+      gtty_hier TYPE STANDARD TABLE OF gty_hier .
+    TYPES:
+      BEGIN OF gty_source,
         name   TYPE c LENGTH 40,
         source TYPE sci_include,
       END OF gty_source .
-  types:
-    gtty_source TYPE STANDARD TABLE OF gty_source .
+    TYPES:
+      gtty_source TYPE STANDARD TABLE OF gty_source .
 
-  data PROGRAM type SOBJ_NAME .
+    DATA program TYPE sobj_name .
 
-  methods PROGRAM_SEARCH
-    importing
-      !UV_PROG type SOBJ_NAME
-    changing
-      !CIT_HIER type GTTY_HIER .
-  methods RECURSIVE_SEARCH
-    importing
-      !UV_TYPE type SEU_OBJ
-      !UV_NAME type SOBJ_NAME
-    changing
-      !CV_NUMB type I
-      !CIT_HIER type GTTY_HIER
-    exceptions
-      TYPE_NOT_FOUND .
-  methods SCAN_OBJECT
-    importing
-      !LI_SHOW_INFO type ABAP_BOOL default ABAP_TRUE
-      !LI_ONLYZ type ABAP_BOOL default ABAP_TRUE
-    exporting
-      value(R_IT_HIER) type ZCL_DRM_SCAN=>GTTY_HIER .
-  methods GET_INCLUDES
-    importing
-      !UV_PROG type SOBJ_NAME
-    changing
-      !CIT_HIER type GTTY_HIER .
-  methods GET_PROG_FROM_CLASS
-    importing
-      !CIFNAME type SEOCLSNAME
-    exporting
-      !PROGNAME type PROGNAME .
-  methods GET_PROG_FROM_IF
-    importing
-      !IFNAME type SEOCLSNAME
-    exporting
-      !PROGNAME type PROGNAME .
+    METHODS program_search
+      IMPORTING
+        !uv_prog  TYPE sobj_name
+      CHANGING
+        !cit_hier TYPE gtty_hier .
+    METHODS recursive_search
+      IMPORTING
+        !uv_type  TYPE seu_obj
+        !uv_name  TYPE sobj_name
+      CHANGING
+        !cv_numb  TYPE i
+        !cit_hier TYPE gtty_hier
+      EXCEPTIONS
+        type_not_found .
+    METHODS scan_object
+      IMPORTING
+        !li_show_info    TYPE abap_bool DEFAULT abap_true
+        !li_onlyz        TYPE abap_bool DEFAULT abap_true
+      EXPORTING
+        VALUE(r_it_hier) TYPE zcl_drm_scan=>gtty_hier .
+    METHODS get_includes
+      IMPORTING
+        !uv_prog  TYPE sobj_name
+      CHANGING
+        !cit_hier TYPE gtty_hier .
+    METHODS get_prog_from_class
+      IMPORTING
+        !cifname  TYPE seoclsname
+      EXPORTING
+        !progname TYPE progname .
+    METHODS get_prog_from_if
+      IMPORTING
+        !ifname   TYPE seoclsname
+      EXPORTING
+        !progname TYPE progname .
   PROTECTED SECTION.
 private section.
 ENDCLASS.
@@ -205,11 +206,13 @@ CLASS ZCL_DRM_SCAN IMPLEMENTATION.
             <ls_hier_incl>-parent = ls_prog_hier-parent.
             <ls_hier_incl>-level  = ls_prog_hier-level - 1.
             <ls_hier_incl>-type   = <ls_incl>-type.
+            <ls_hier_incl>-encl_obj   = ls_prog_hier-encl_obj.
           CATCH cx_sy_itab_line_not_found.
             <ls_hier_incl>-name = <ls_incl>-object.
             <ls_hier_incl>-type = <ls_incl>-type.
             <ls_hier_incl>-level = cv_numb.
             <ls_hier_incl>-parent = <ls_incl>-call_obj.
+            <ls_hier_incl>-encl_obj   = <ls_incl>-encl_obj.
         ENDTRY.
       ENDLOOP.
 
@@ -356,6 +359,7 @@ CLASS ZCL_DRM_SCAN IMPLEMENTATION.
               OTHERS              = 6.
           IF sy-subrc EQ 0.
             <ls_hier>-details = lv_incl.
+            <ls_hier>-encl_obj = <ls_data>-encl_obj.
           ENDIF.
 
         ENDIF.
