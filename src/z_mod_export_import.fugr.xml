@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_FUGR" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <AREAT>Export/Import de memoria</AREAT>
+   <INCLUDES>
+    <SOBJ_NAME>LZ_MOD_EXPORT_IMPORTTOP</SOBJ_NAME>
+    <SOBJ_NAME>SAPLZ_MOD_EXPORT_IMPORT</SOBJ_NAME>
+   </INCLUDES>
+   <FUNCTIONS>
+    <item>
+     <FUNCNAME>Z_MOD_EXPORT</FUNCNAME>
+     <SHORT_TEXT>Export to memory</SHORT_TEXT>
+     <IMPORT>
+      <RSIMP>
+       <PARAMETER>I_VALUE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR40</TYP>
+      </RSIMP>
+     </IMPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>I_VALUE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character field of length 40</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+    <item>
+     <FUNCNAME>Z_MOD_IMPORT</FUNCNAME>
+     <SHORT_TEXT>Recuperar el valor de memoria</SHORT_TEXT>
+     <EXPORT>
+      <RSEXP>
+       <PARAMETER>E_VALUE</PARAMETER>
+       <REFERENCE>X</REFERENCE>
+       <TYP>CHAR40</TYP>
+      </RSEXP>
+     </EXPORT>
+     <DOCUMENTATION>
+      <RSFDO>
+       <PARAMETER>E_VALUE</PARAMETER>
+       <KIND>P</KIND>
+       <STEXT>Character field of length 40</STEXT>
+      </RSFDO>
+     </DOCUMENTATION>
+    </item>
+   </FUNCTIONS>
+  </asx:values>
+ </asx:abap>
+</abapGit>
